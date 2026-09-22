@@ -100,14 +100,21 @@ static int execute_program(int memory[]) {
       break;
     }
     case DIVIDE: {
-      result = (int)accumulator / memory[operand];
-      if (result < 0 || result > 9999) {
-        fprintf(stderr,
-                "Out of range value for accumulator in DIVIDE operation: %+05d",
-                result);
-        break;
+      int denominator = memory[operand];
+
+      if (denominator == 0) {
+        fprintf(stderr, "Division by Zero.");
+      } else {
+        result = (int)accumulator / denominator;
+        if (result < 0 || result > 9999) {
+          fprintf(
+              stderr,
+              "Out of range value for accumulator in DIVIDE operation: %+05d",
+              result);
+          break;
+        }
+        accumulator = result;
       }
-      accumulator = result;
       ++instruction_register;
       break;
     }
