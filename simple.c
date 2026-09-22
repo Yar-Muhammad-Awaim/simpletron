@@ -17,7 +17,6 @@ static int execute_program(int memory[]) {
   int operation_code = 0;
   int operand = 0;
   int result = 0;
-  bool has_branched = false;
 
   while (running) {
     if (instruction_counter < 0 || instruction_counter >= 100) {
@@ -26,9 +25,7 @@ static int execute_program(int memory[]) {
     }
 
     // fetch the instrucction
-    if (!has_branched) {
-      instruction_register = memory[instruction_counter];
-    }
+    instruction_register = memory[instruction_counter];
 
     // check if the instruction is valid
     if (instruction_register < 0 || instruction_register > 9999) {
@@ -66,11 +63,13 @@ static int execute_program(int memory[]) {
       printf("%+05d", memory[operand]);
       ++instruction_counter;
       break;
-    case LOAD:
+    }
+    case LOAD: {
       accumulator = memory[operand];
       ++instruction_counter;
       break;
-    case STORE:
+    }
+    case STORE: {
       memory[operand] = accumulator;
       ++instruction_counter;
       break;
@@ -126,14 +125,12 @@ static int execute_program(int memory[]) {
       break;
     }
     case BRANCH: {
-      instruction_register = operand;
-      has_branched = true;
+      instruction_counter = operand;
       break;
     }
     case BRANCHNEG: {
       if (accumulator < 0) {
-        instruction_register = operand;
-        has_branched = true;
+        instruction_counter = operand;
       } else {
         ++instruction_register;
       }
@@ -142,7 +139,6 @@ static int execute_program(int memory[]) {
     case BRANCHZERO: {
       if (accumulator == 0) {
         instruction_register = operand;
-        has_branched = true;
       } else {
         ++instruction_counter;
       }
@@ -154,6 +150,8 @@ static int execute_program(int memory[]) {
       break;
     }
     }
+    dump_memory(accumulator, instruction_counter, instruction_register,
+                operation_code, operand, memory);
   }
   return 0;
 }
