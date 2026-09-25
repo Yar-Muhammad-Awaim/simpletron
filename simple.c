@@ -48,10 +48,10 @@ static int execute_program(int memory[]) {
       scanf("%d", &result);
 
       if (result < -9999 || result > 9999) {
-        fprintf(
-            stderr,
-            "The value to be stored is not in the range of -9999 and 9999 (%d)",
-            result);
+        fprintf(stderr,
+                "The value to be stored is not in the range of -9999 and 9999 "
+                "(%d).\n",
+                result);
         break;
       }
 
@@ -78,7 +78,7 @@ static int execute_program(int memory[]) {
       result = accumulator + memory[operand];
       if (result < 0 || result > 9999) {
         fprintf(stderr,
-                "Out of range value for accumulator in ADD operation: %+05d",
+                "Out of range value for accumulator in ADD operation: %+05d.\n",
                 result);
         break;
       }
@@ -89,10 +89,10 @@ static int execute_program(int memory[]) {
     case SUBTRACT: {
       result = accumulator - memory[operand];
       if (result < 0 || result > 9999) {
-        fprintf(
-            stderr,
-            "Out of range value for accumulator in SUBTRACT operation: %+05d",
-            result);
+        fprintf(stderr,
+                "Out of range value for accumulator in SUBTRACT operation: "
+                "%+05d.\n",
+                result);
         break;
       }
       accumulator = result;
@@ -107,24 +107,25 @@ static int execute_program(int memory[]) {
       } else {
         result = (int)accumulator / denominator;
         if (result < 0 || result > 9999) {
-          fprintf(
-              stderr,
-              "Out of range value for accumulator in DIVIDE operation: %+05d",
-              result);
+          fprintf(stderr,
+                  "Out of range value for accumulator in DIVIDE operation: "
+                  "%+05d.\n",
+                  result);
           break;
         }
         accumulator = result;
       }
-      ++instruction_register;
+      ++instruction_counter;
       break;
     }
     case MULTIPLY: {
       result = accumulator * memory[operand];
 
       if (result < 0 || result > 9999) {
-        fprintf(stderr,
-                "Out of range value for accumulator in DIVIDE operation: %+05d",
-                result);
+        fprintf(
+            stderr,
+            "Out of range value for accumulator in DIVIDE operation: %+05d.\n",
+            result);
         break;
       }
       accumulator = result;
@@ -145,14 +146,14 @@ static int execute_program(int memory[]) {
     }
     case BRANCHZERO: {
       if (accumulator == 0) {
-        instruction_register = operand;
+        instruction_counter = operand;
       } else {
         ++instruction_counter;
       }
       break;
     }
     case HALT: {
-      fprintf(stdout, "SIMPLETRON Execution Successful.");
+      fprintf(stdout, "SIMPLETRON Execution Successful.\n");
       running = 0;
       break;
     }
@@ -165,7 +166,8 @@ static int execute_program(int memory[]) {
 
 int main(int argc, char *argv[]) {
   if (argc < 2) {
-    fprintf(stderr, "simple.c:main filename for sml program wasn't provided.");
+    fprintf(stderr,
+            "simple.c:main filename for sml program wasn't provided.\n");
     return -1;
   }
 

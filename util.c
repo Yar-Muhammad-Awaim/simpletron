@@ -16,7 +16,7 @@ int load_sml(const char *filename, int memory[SIMPLETRON_MEMORY_SIZE]) {
   fptr = fopen(filename, "r");
 
   if (fptr == NULL) {
-    fprintf(stderr, "load_sml: can't open file %s: %s", filename,
+    fprintf(stderr, "load_sml: can't open file %s: %s.\n", filename,
             strerror(errno));
     return -1;
   }
@@ -32,9 +32,6 @@ int load_sml(const char *filename, int memory[SIMPLETRON_MEMORY_SIZE]) {
     instruction_counter++;
   }
 
-  for (int i = 0; i < SIMPLETRON_MEMORY_SIZE; ++i) {
-    printf("%d\n", memory[i]);
-  }
   fclose(fptr);
   return 0;
 }
